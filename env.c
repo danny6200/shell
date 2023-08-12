@@ -13,8 +13,8 @@ void print_env(void)
 
 	while (env[i])
 	{
-		printf("%s", env[i]);
+		printf("%s\n", env[i]);
 		i++;
 	}
-	printf("\n");
+	/* printf("\n"); */
 }
