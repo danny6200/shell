@@ -8,9 +8,10 @@
 #include <stddef.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <sys/stat.h>
 
-int prompt(void);
+
 char **str2arr(char *str, char *delim);
-
+void chck_cmd(char **av);
 
 #endif /* main.h */
