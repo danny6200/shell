@@ -95,7 +95,7 @@ void chck_cmd(char **av)
 	}
 	else
 	{
-		printf("/hsh: %s: not found\n", av[0]);
+		perror("/hsh: not found");
 		exit(1);
 	}
 }
