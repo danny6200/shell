@@ -12,7 +12,6 @@ int main(void)
 	char **arr;
 	size_t len = 0;
 	ssize_t read;
-	int i = 0;
 
 	while (1)
 	{
@@ -26,7 +25,10 @@ int main(void)
 			exit(1);
 		}
 		arr = str2arr(buff, delim);
-		printf("%p", arr[i]);
+		if (strcmp(arr[0], "exit") == 0)
+			exit(0);
+		if (strcmp(arr[0], "env") == 0)
+			print_env();
 
 	}
 	return (0);
@@ -34,7 +36,7 @@ int main(void)
 
 /**
  * str2arr - performs tokenization of string recieved from main
- * @str - string to be tokenized
+ * @str: string to be tokenized
  * @delim: delimiter seperatimg each entry
  * Return: pointer to array of tokens
  */
@@ -52,7 +54,7 @@ char **str2arr(char *str, char *delim)
 		arr[i] = strtok(NULL, delim);
 	}
 	arr[i] = NULL;
-	a = malloc(i * sizeof(char*));
+	a = malloc(i * sizeof(char *));
 	if (a == NULL)
 		exit(1);
 	for (n = 0; n < i; n++)
