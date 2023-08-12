@@ -6,17 +6,17 @@
  *
  */
 
-int main(void)
+int main(int ac, char **av, char **env)
 {
+	(void)ac;
 	char *buff = NULL, *delim = " \n";
-	char **arr;
 	size_t len = 0;
 	ssize_t read;
-	int i = 0;
-
+	int status;
+	pid_t child;
+	
 	while (1)
 	{
-
 		printf("#simple_shell$ ");
 		read = getline(&buff, &len, stdin);
 		if (read == -1)
@@ -25,9 +25,13 @@ int main(void)
 			printf("\n");
 			exit(1);
 		}
-		arr = str2arr(buff, delim);
-		printf("%p", arr[i]);
-
+		av = str2arr(buff, delim);
+		/*printf("%p", arr[i]);*/
+		child = fork();
+		if (child == 0)
+			chck_cmd(av);
+		else
+			wait(&status);
 	}
 	return (0);
 }
@@ -67,4 +71,31 @@ char **str2arr(char *str, char *delim)
 	free(arr);
 
 	return (a);
+}
+/**
+ * chck_cmd - checks if command is valid
+ * @av: argument vector
+ *
+ * Return: nothing
+ */
+void chck_cmd(char **av)
+{
+	unsigned int i;
+	struct stat st;
+	extern char **environ;
+
+	(void)i;
+	if (stat(av[0], &st) == 0)
+	{
+		if (execve(av[0], av, environ) == -1)
+		{
+			perror("/hsh: not found");
+			exit(1);
+		}
+	}
+	else
+	{
+		printf("/hsh: %s: not found\n", av[0]);
+		exit(1);
+	}
 }
