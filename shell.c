@@ -104,13 +104,13 @@ void chck_cmd(char **av, char *file_name)
 	{
 		if (execve(av[0], av, environ) == -1)
 		{
-			fprintf(stdout, "%s: not found\n", file_name);
+			fprintf(stdout, "%s: 1: %s: not found\n", file_name, av[0]);
 			exit(1);
 		}
 	}
 	else
 	{
-		fprintf(stdout, "%s: not found\n", file_name);
+		fprintf(stdout, "%s: 1: %s: not found\n", file_name, av[0]);
 		exit(1);
 	}
 }
