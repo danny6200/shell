@@ -12,7 +12,7 @@
 
 
 char **str2arr(char *str, char *delim);
-void chck_cmd(char **av);
+void chck_cmd(char **av, char *file_name);
 
 extern char **environ;
 char **str2arr(char *str, char *delim);

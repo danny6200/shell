@@ -8,7 +8,7 @@
 
 int main(int ac, char **av, __attribute__((unused)) char **env)
 {
-	char *buff = NULL, *delim = " \n";
+	char *buff = NULL, *delim = " \n", *f_name = av[0];
 	size_t len = 0;
 	ssize_t read;
 	int status;
@@ -36,7 +36,7 @@ int main(int ac, char **av, __attribute__((unused)) char **env)
 			print_env();
 		child = fork();
 		if (child == 0)
-			chck_cmd(av);
+			chck_cmd(av, f_name);
 		else
 			wait(&status);
 
@@ -93,7 +93,7 @@ char **str2arr(char *str, char *delim)
  *
  * Return: nothing
  */
-void chck_cmd(char **av)
+void chck_cmd(char **av, char *file_name)
 {
 	unsigned int i;
 	struct stat st;
@@ -104,13 +104,13 @@ void chck_cmd(char **av)
 	{
 		if (execve(av[0], av, environ) == -1)
 		{
-			perror("/hsh: not found");
+			fprintf(stdout, "%s: not found\n", file_name);
 			exit(1);
 		}
 	}
 	else
 	{
-		perror("/hsh: not found");
+		fprintf(stdout, "%s: not found\n", file_name);
 		exit(1);
 	}
 }
