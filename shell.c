@@ -2,6 +2,10 @@
 
 /**
  * main - simple shell core. this is where the primary engine lives
+ * @ac: argument count
+ * @av: argument vector
+ * @env: environment vector
+ *
  * Return: 0 success
  *
  */
@@ -15,7 +19,7 @@ int main(int ac, char **av, __attribute__((unused)) char **env)
 
 	while (1)
 	{
-	Point:
+Point:
 		printf("#simple_shell$ ");
 		read = getline(&buff, &len, stdin);
 		if (read == -1)
@@ -23,10 +27,13 @@ int main(int ac, char **av, __attribute__((unused)) char **env)
 			printf("\n");
 			exit(1);
 		}
-		else if (strcmp(buff, "\n") == 0)
-			goto Point;
+/**		else if (strcmp(buff, "\n") == 0 ||
+			strcmp(buff, " \n") == 0)
+			goto Point;*/
 
 		av = str2arr(buff, delim);
+		if (av == NULL)
+			goto Point;
 		getfunc(av, f_name);
 	}
 	len = 0;
@@ -53,6 +60,9 @@ char **str2arr(char *str, char *delim)
 
 	arr = malloc(strlen(str) * sizeof(char *));
 	arr[i] = strtok(str, delim);
+	if (arr[i] == NULL)
+/*		exit(1);*/
+		return (NULL);
 	while (arr[i] != NULL)
 	{
 		i++;
@@ -61,14 +71,16 @@ char **str2arr(char *str, char *delim)
 	arr[i] = NULL;
 	a = malloc(i * sizeof(char *));
 	if (a == NULL)
-		exit(1);
+/*		exit(1);*/
+		return (NULL);
 	for (n = 0; n < i; n++)
 	{
 		a[n] = strdup(arr[n]);
 		if (a[n] == NULL)
 		{
 			perror("Memory allocation error");
-			exit(1);
+/*			exit(1);*/
+			return (NULL);
 		}
 	}
 	free(arr);
@@ -77,6 +89,7 @@ char **str2arr(char *str, char *delim)
 /**
  * chck_cmd - checks if command is valid
  * @av: argument vector
+ * @file_name: name of shell executable
  *
  * Return: nothing
  */
@@ -92,13 +105,13 @@ void chck_cmd(char **av, char *file_name)
 		if (execve(av[0], av, env) == -1)
 		{
 			fprintf(stdout, "%s: 1: %s: not found\n", file_name, av[0]);
-			exit(1);
+			return;
 		}
 	}
 	else
 	{
 		fprintf(stdout, "%s: 1: %s: not found\n", file_name, av[0]);
-		exit(1);
+		return;
 	}
 }
 
@@ -106,6 +119,8 @@ void chck_cmd(char **av, char *file_name)
 /**
  * getfunc - handles all functions from main
  * @av: array of arguments feom mamin
+ * @f_name: name of shell executable
+ *
  * Return: 0 or -1
  */
 
