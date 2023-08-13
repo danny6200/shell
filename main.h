@@ -17,6 +17,7 @@ void chck_cmd(char **av);
 extern char **environ;
 char **str2arr(char *str, char *delim);
 void err(char *error_type);
+void __exit(char *str);
 void print_env(void);
 
 #endif /* main.h */
