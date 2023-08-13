@@ -12,11 +12,12 @@
 
 
 char **str2arr(char *str, char *delim);
-void chck_cmd(char **av);
-
+void chck_cmd(char **av, char *file_name);
+void getfunc(char **av, char *f_name);
 extern char **environ;
 char **str2arr(char *str, char *delim);
 void err(char *error_type);
+void __exit(char *str);
 void print_env(void);
 
 #endif /* main.h */
