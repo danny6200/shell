@@ -11,8 +11,6 @@ int main(int ac, char **av, __attribute__((unused)) char **env)
 	char *buff = NULL, *delim = " \n", *f_name = av[0];
 	size_t len = 0;
 	ssize_t read;
-	int status;
-	pid_t child;
 	(void)ac;
 
 	while (1)
@@ -29,17 +27,7 @@ int main(int ac, char **av, __attribute__((unused)) char **env)
 			goto Point;
 
 		av = str2arr(buff, delim);
-		/* these are temporary */
-		if (strcmp(av[0], "exit") == 0)
-			__exit(av[1]);
-		if (strcmp(av[0], "env") == 0)
-			print_env();
-		child = fork();
-		if (child == 0)
-			chck_cmd(av, f_name);
-		else
-			wait(&status);
-
+		getfunc(av, f_name);
 	}
 	len = 0;
 	while (av[len])
@@ -48,7 +36,6 @@ int main(int ac, char **av, __attribute__((unused)) char **env)
 		len++;
 	}
 	free(buff);
-	/*free(buff);*/
 	return (0);
 }
 
@@ -97,12 +84,12 @@ void chck_cmd(char **av, char *file_name)
 {
 	unsigned int i;
 	struct stat st;
-	extern char **environ;
+	char **env = environ;
 
 	(void)i;
 	if (stat(av[0], &st) == 0)
 	{
-		if (execve(av[0], av, environ) == -1)
+		if (execve(av[0], av, env) == -1)
 		{
 			fprintf(stdout, "%s: 1: %s: not found\n", file_name, av[0]);
 			exit(1);
@@ -113,4 +100,27 @@ void chck_cmd(char **av, char *file_name)
 		fprintf(stdout, "%s: 1: %s: not found\n", file_name, av[0]);
 		exit(1);
 	}
+}
+
+
+/**
+ * getfunc - handles all functions from main
+ * @av: array of arguments feom mamin
+ * Return: 0 or -1
+ */
+
+void getfunc(char **av, char *f_name)
+{
+	int status;
+	pid_t child;
+
+	if (strcmp(av[0], "exit") == 0)
+		__exit(av[1]);
+	if (strcmp(av[0], "env") == 0)
+		print_env();
+	child = fork();
+	if (child == 0)
+		chck_cmd(av, f_name);
+	else
+		wait(&status);
 }
