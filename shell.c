@@ -14,7 +14,7 @@ int main(int ac, char **av, char **env)
 	ssize_t read;
 	int status;
 	pid_t child;
-	
+
 	while (1)
 	{
 		printf("#simple_shell$ ");
@@ -25,20 +25,26 @@ int main(int ac, char **av, char **env)
 			printf("\n");
 			exit(1);
 		}
+		
 		av = str2arr(buff, delim);
 		/*printf("%p", arr[i]);*/
+		if (strcmp(av[0], "exit") == 0)
+			exit(0);
+		if (strcmp(av[0], "env") == 0)
+			print_env();
 		child = fork();
 		if (child == 0)
 			chck_cmd(av);
 		else
 			wait(&status);
+
 	}
 	return (0);
 }
 
 /**
  * str2arr - performs tokenization of string recieved from main
- * @str - string to be tokenized
+ * @str: string to be tokenized
  * @delim: delimiter seperatimg each entry
  * Return: pointer to array of tokens
  */
@@ -56,7 +62,7 @@ char **str2arr(char *str, char *delim)
 		arr[i] = strtok(NULL, delim);
 	}
 	arr[i] = NULL;
-	a = malloc(i * sizeof(char*));
+	a = malloc(i * sizeof(char *));
 	if (a == NULL)
 		exit(1);
 	for (n = 0; n < i; n++)

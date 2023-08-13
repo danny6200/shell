@@ -14,4 +14,9 @@
 char **str2arr(char *str, char *delim);
 void chck_cmd(char **av);
 
+extern char **environ;
+char **str2arr(char *str, char *delim);
+void err(char *error_type);
+void print_env(void);
+
 #endif /* main.h */
