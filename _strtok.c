@@ -10,14 +10,14 @@
 char *_strtok(char *str, const char *delim)
 {
 	/* Stores the last position between function calls */
-	static char *last = NULL;
+	static char *last;
 	char *start, *end;
 
 	if (str != NULL)
 		last = str;/* Initialize last with str if str is not NULL */
 
 	if (last == NULL)
-		return NULL;/* Return NULL if there are no more tokens */
+		return (NULL);/* Return NULL if there are no more tokens */
 
 	start = last;/* Set the starting point for the token */
 	end = strpbrk(start, delim);/* Find the next delimiter in the string */
