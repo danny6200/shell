@@ -21,14 +21,17 @@ int main(int ac, char **av, __attribute__((unused)) char **env)
 	{
 Point:
 		count++;
-		printf("#simple_shell$ ");
+		printf("$ ");
 		read = getline(&buff, &len, stdin);
 		if (read == -1)
 		{
 			printf("\n");
-			exit(0);
+			exit(1);
 		}
 		av = str2arr(buff, delim);
+		buff = NULL;
+		if (strcmp(av[0], "exit") == 0)
+			__exit(av[1]);
 		if (av == NULL)
 			goto Point;
 		getfunc(av, f_name, count);
@@ -64,7 +67,7 @@ char **str2arr(char *str, char *delim)
 		i++;
 		arr[i] = strtok(NULL, delim);
 	}
-	arr[i] = NULL;
+/*	arr[i] = NULL;*/
 	a = malloc((i + 1) * sizeof(char *));
 	if (a == NULL)
 		return (NULL);
@@ -84,7 +87,7 @@ char **str2arr(char *str, char *delim)
  * chck_cmd - checks if command is valid
  * @av: argument vector
  * @file_name: name of shell executable
- *
+ * @count: line count
  * Return: nothing
  */
 void chck_cmd(char **av, char *file_name, size_t count)
@@ -114,7 +117,7 @@ void chck_cmd(char **av, char *file_name, size_t count)
  * getfunc - handles all functions from main
  * @av: array of arguments feom mamin
  * @f_name: name of shell executable
- *
+ * @count: line count
  * Return: 0 or -1
  */
 
