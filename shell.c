@@ -26,13 +26,8 @@ Point:
 		if (read == -1)
 		{
 			printf("\n");
-			exit(1);
+			exit(0);
 		}
-/*
- *		else if (strcmp(buff, "\n") == 0 ||
- *			strcmp(buff, " \n") == 0)
- *			goto Point;
- */
 		av = str2arr(buff, delim);
 		if (av == NULL)
 			goto Point;
@@ -63,7 +58,6 @@ char **str2arr(char *str, char *delim)
 	arr = malloc(strlen(str) * sizeof(char *));
 	arr[i] = strtok(str, delim);
 	if (arr[i] == NULL)
-/*		exit(1);*/
 		return (NULL);
 	while (arr[i] != NULL)
 	{
@@ -73,7 +67,6 @@ char **str2arr(char *str, char *delim)
 	arr[i] = NULL;
 	a = malloc(i * sizeof(char *));
 	if (a == NULL)
-/*		exit(1);*/
 		return (NULL);
 	for (n = 0; n < i; n++)
 	{
@@ -81,7 +74,6 @@ char **str2arr(char *str, char *delim)
 		if (a[n] == NULL)
 		{
 			perror("Memory allocation error");
-/*			exit(1);*/
 			return (NULL);
 		}
 	}

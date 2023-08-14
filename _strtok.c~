@@ -1,0 +1,50 @@
+#include "main.h"
+
+/**
+ * _strtok - costum strtok
+ * @str: string to be tokenized
+ * @delim: delimiter
+ * Return: each word
+ */
+
+char *_strtok(char *str, const char *delim)
+{
+	static char *last = NULL;
+	char *start, *end;
+
+	if (str != NULL)
+		last = str;
+
+	if (last == NULL)
+		return NULL;
+
+	start = last;
+	end = strpbrk(start, delim);
+	if (end != NULL)
+	{
+		*end = '\0';
+		last = end + 1;
+	}
+	else
+		last = NULL;
+
+	return (start);
+}
+
+
+int main(void) {
+        char *input = "This is a test string";
+        char *token = _strtok(input, "  \n");
+
+        while (token != NULL) {
+                printf("%s\n", token);
+
+                if (token == NULL) {
+                        break;
+                }
+
+                token = _strtok(NULL, " \n");
+        }
+
+        return (0);
+}
