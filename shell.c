@@ -13,13 +13,14 @@
 int main(int ac, char **av, __attribute__((unused)) char **env)
 {
 	char *buff = NULL, *delim = " \n", *f_name = av[0];
-	size_t len = 0;
+	size_t len = 0, count = 0;
 	ssize_t read;
 	(void)ac;
 
 	while (1)
 	{
 Point:
+		count++;
 		printf("#simple_shell$ ");
 		read = getline(&buff, &len, stdin);
 		if (read == -1)
@@ -27,14 +28,15 @@ Point:
 			printf("\n");
 			exit(1);
 		}
-/**		else if (strcmp(buff, "\n") == 0 ||
-			strcmp(buff, " \n") == 0)
-			goto Point;*/
-
+/*
+ *		else if (strcmp(buff, "\n") == 0 ||
+ *			strcmp(buff, " \n") == 0)
+ *			goto Point;
+ */
 		av = str2arr(buff, delim);
 		if (av == NULL)
 			goto Point;
-		getfunc(av, f_name);
+		getfunc(av, f_name, count);
 	}
 	len = 0;
 	while (av[len])
@@ -93,9 +95,9 @@ char **str2arr(char *str, char *delim)
  *
  * Return: nothing
  */
-void chck_cmd(char **av, char *file_name)
+void chck_cmd(char **av, char *file_name, size_t count)
 {
-	unsigned int i;
+	unsigned int i, n = count;
 	struct stat st;
 	char **env = environ;
 
@@ -104,13 +106,13 @@ void chck_cmd(char **av, char *file_name)
 	{
 		if (execve(av[0], av, env) == -1)
 		{
-			fprintf(stdout, "%s: 1: %s: not found\n", file_name, av[0]);
+			fprintf(stdout, "%s: %u: %s: not found\n", file_name, n, av[0]);
 			return;
 		}
 	}
 	else
 	{
-		fprintf(stdout, "%s: 1: %s: not found\n", file_name, av[0]);
+		fprintf(stdout, "%s: %u: %s: not found\n", file_name, n, av[0]);
 		return;
 	}
 }
@@ -124,7 +126,7 @@ void chck_cmd(char **av, char *file_name)
  * Return: 0 or -1
  */
 
-void getfunc(char **av, char *f_name)
+void getfunc(char **av, char *f_name, size_t count)
 {
 	int status;
 	pid_t child;
@@ -135,7 +137,7 @@ void getfunc(char **av, char *f_name)
 		print_env();
 	child = fork();
 	if (child == 0)
-		chck_cmd(av, f_name);
+		chck_cmd(av, f_name, count);
 	else
 		wait(&status);
 }
