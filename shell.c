@@ -13,7 +13,7 @@
 int main(int ac, char **av, __attribute__((unused)) char **env)
 {
 	char *buff = NULL, *delim = " \n", *f_name = av[0];
-	size_t len = 0, count = 0, i;
+	size_t len = 0, count = 0;
 	ssize_t read;
 	(void)ac;
 
