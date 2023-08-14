@@ -30,8 +30,6 @@ Point:
 		}
 		av = str2arr(buff, delim);
 		buff = NULL;
-		if (strcmp(av[0], "exit") == 0)
-			__exit(av[1]);
 		if (av == NULL)
 			goto Point;
 		getfunc(av, f_name, count);
