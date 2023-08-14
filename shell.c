@@ -13,7 +13,7 @@
 int main(int ac, char **av, __attribute__((unused)) char **env)
 {
 	char *buff = NULL, *delim = " \n", *f_name = av[0];
-	size_t len = 0, count = 0;
+	size_t len = 0, count = 0, i;
 	ssize_t read;
 	(void)ac;
 
@@ -65,7 +65,7 @@ char **str2arr(char *str, char *delim)
 		arr[i] = strtok(NULL, delim);
 	}
 	arr[i] = NULL;
-	a = malloc(i * sizeof(char *));
+	a = malloc((i + 1) * sizeof(char *));
 	if (a == NULL)
 		return (NULL);
 	for (n = 0; n < i; n++)
