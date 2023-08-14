@@ -13,7 +13,7 @@
 int main(int ac, char **av, __attribute__((unused)) char **env)
 {
 	char *buff = NULL, *delim = " \n", *f_name = av[0];
-	size_t len = 0, count = 0, i;
+	size_t len = 0, count = 0;
 	ssize_t read;
 	(void)ac;
 
@@ -34,7 +34,7 @@ Point:
 		getfunc(av, f_name, count);
 	}
 	len = 0;
-	while (av[len])
+	while (av[len] != NULL)
 	{
 		free(av[len]);
 		len++;
@@ -91,11 +91,22 @@ void chck_cmd(char **av, char *file_name, size_t count)
 {
 	unsigned int i, n = count;
 	struct stat st;
-	char **env = environ;
+	char **env = environ, **split_path, *path, *path_copy, *delim = "/";
 
-	(void)i;
+	(void)i; (void)path; (void)path_copy; (void)split_path; (void)delim;
 	if (stat(av[0], &st) == 0)
 	{
+/**		path = av[0];
+		path_copy = path;
+		printf("path is: %s\n", path);
+		split_path = str2arr(path_copy, delim);
+		printf("split_path[0] is: %s\n", split_path[0]);
+		printf("split_path[1] is: %s\n", split_path[1]);
+		printf("path_copy is: %s\n", path_copy);
+		if (split_path == NULL)
+			return;
+		av[0] = split_path[1];*/
+
 		if (execve(av[0], av, env) == -1)
 		{
 			fprintf(stdout, "%s: %u: %s: not found\n", file_name, n, av[0]);
