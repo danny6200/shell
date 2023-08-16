@@ -10,7 +10,7 @@
  *
  */
 
-int main(int ac, char **av, __attribute__((unused)) char **env)
+int main(int ac, char **av, char **env)
 {
 	char *buff = NULL, *delim = " \n", *f_name = av[0];
 	size_t len = 0, count = 0;
@@ -21,27 +21,29 @@ int main(int ac, char **av, __attribute__((unused)) char **env)
 	{
 Point:
 		count++;
-		printf("$ ");
-		read = getline(&buff, &len, stdin);
-		if (read == -1)
+		if (!(isatty(STDIN_FILENO)))
+			non_interactive(env, f_name, count);
+		else
 		{
-			printf("\n");
-			exit(1);
+			printf("$ ");
+			read = getline(&buff, &len, stdin);
+			if (read == -1)
+			{
+				printf("\n");
+				exit(1);
+			}
+			av = str2arr(buff, delim);
+			buff = NULL;
+			if (av == NULL)
+				goto Point;
+			getfunc(av, f_name, count);
 		}
-		av = str2arr(buff, delim);
-		buff = NULL;
-		if (av == NULL)
-			goto Point;
-		getfunc(av, f_name, count);
 	}
-	len = 0;
-	while (av[len])
-	{
-		free(av[len]);
-		len++;
-	}
-	free(buff);
-	return (0);
+		for (len = 0; av[len] != NULL; len++)
+			free(av[len]);
+		free(av);
+		free(buff);
+		return (0);
 }
 
 /**
@@ -130,7 +132,10 @@ void getfunc(char **av, char *f_name, size_t count)
 		print_env();
 	child = fork();
 	if (child == 0)
+	{
 		chck_cmd(av, f_name, count);
+		exit(0);
+	}
 	else
 		wait(&status);
 }
