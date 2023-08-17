@@ -10,7 +10,7 @@
  *
  */
 
-int main(int ac, char **av, __attribute__((unused)) char **env)
+int main(int ac, char **av, char **env)
 {
 	char *buff = NULL, *delim = " \n", *f_name = av[0];
 	size_t len = 0, count = 0;
@@ -22,27 +22,26 @@ int main(int ac, char **av, __attribute__((unused)) char **env)
 	{
 Point:
 		count++;
-		printf("$ ");
-		read = getline(&buff, &len, stdin);
-		if (read == -1)
+		if (!(isatty(STDIN_FILENO)))
+			non_interactive(env, f_name, count);
+		else
 		{
-			printf("\n");
-			exit(1);
+			printf("$ ");
+			read = getline(&buff, &len, stdin);
+			if (read == -1)
+			{
+				printf("\n");
+				exit(1);
+			}
+			av = str2arr(buff, delim);
+			buff = NULL;
+			if (av == NULL)
+				goto Point;
+			getfunc(av, f_name, count);
 		}
-		av = str2arr(buff, delim);
-		buff = NULL;
-		if (av == NULL)
-			goto Point;
-		getfunc(av, f_name, count);
-	}
-	len = 0;
-	while (av[len] != NULL)
-	{
-		free(av[len]);
-		len++;
-	}
-	free(buff);
-	return (0);
+		free_dp(av);
+		free(buff);
+		return (0);
 }
 
 /**
@@ -60,28 +59,36 @@ char **str2arr(char *str, char *delim)
 	arr = malloc(strlen(str) * sizeof(char *));
 	arr[i] = strtok(str, delim);
 	if (arr[i] == NULL)
+	{
+		free(arr);
 		return (NULL);
+	}
 	while (arr[i] != NULL)
 	{
 		i++;
 		arr[i] = strtok(NULL, delim);
 	}
-/*	arr[i] = NULL;*/
 	a = malloc((i + 1) * sizeof(char *));
 	if (a == NULL)
+	{
+		free(arr);
 		return (NULL);
+	}
 	for (n = 0; n < i; n++)
 	{
 		a[n] = strdup(arr[n]);
 		if (a[n] == NULL)
 		{
-			perror("Memory allocation error");
+			free_dp(a);
 			return (NULL);
 		}
+
 	}
-	free(arr);
+	a[i] = NULL;
+	/* free(arr); */
 	return (a);
 }
+
 /**
  * chck_cmd - checks validity of command
  *
@@ -92,7 +99,10 @@ int chck_cmd(char *cmd)
 	char *path = _getpath(cmd);
 
 	if (path == NULL)
+	{
+		free(path);
 		return (1);
+	}
 	free(path);
 	return (0);
 }
@@ -110,7 +120,7 @@ void getfunc(char **av, char *f_name, size_t count)
 {
 	if (strcmp(av[0], "exit") == 0)
 		__exit(av[1]);
-	if (strcmp(av[0], "env") == 0)
+	else if (strcmp(av[0], "env") == 0)
 	{
 		print_env();
 		return;
@@ -151,7 +161,6 @@ void exec_cmd(char **av, char *file_name, size_t count)
 		}
 		else
 			wait(&status);
-
 	}
 	else
 		fprintf(stdout, "%s: %lu: %s: not found", file_name, n, av[0]);

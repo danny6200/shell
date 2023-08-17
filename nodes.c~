@@ -1,0 +1,57 @@
+#include "main.h"
+
+
+/**
+ * add_node_end - adds a new node at the end of a list_t list
+ * @head: pointer to the head of the list
+ * @str: str data for the new node
+ * Return: address of new element, or NULL if failed
+ */
+list_t *add_node_end(list_t **head, const char *str)
+{
+	list_t *new, *temp;
+
+	if (str == NULL || head == NULL)
+		return (NULL);
+
+	new = malloc(sizeof(list_t));
+	if (new == NULL)
+		return (NULL);
+
+	new->env = strdup(str);
+	if (new->env == NULL)
+	{
+		free(new);
+		return (NULL);
+	}
+	new->next = NULL;
+
+	if (*head == NULL)
+		*head = new;
+	else
+	{
+		temp = *head;
+		while (temp->next != NULL)
+			temp = temp->next;
+		temp->next = new;
+	}
+
+	return (new);
+}
+
+/**
+ * env2linkd - converts env to linked list
+ * @env: enviromental variables
+ * Return: pointer to head nodde
+ */
+
+list_t env2linkd(char **env)
+{
+	int i;
+	list_t *head;
+
+	head = NULL;
+	for (i = 0; env[i] != NULL; i++)
+		add_node_end(&head, env[i]);
+	return (head);
+}
