@@ -10,27 +10,32 @@
 
 void non_interactive(__attribute__((unused)) char **env, char *fname, int count)
 {
-	char *buff = malloc(1024), *delim = "\n", **arr, **cmd, *temp;
+	char *buff = malloc(1024), *delim = "\n", **arr = NULL, **cmd = NULL;
+	char *temp = NULL;
 	ssize_t bytes_read;
 	int i;
 
-	bytes_read = read(STDIN_FILENO, buff, 1024);
+	if (buff == NULL)
+		exit(0);
 
-	if (bytes_read == -1)
-		exit(0);
-	arr = str2arr(buff, delim);
-	if (arr == NULL)
+	while ((bytes_read = read(STDIN_FILENO, buff, 1024)) > 0)
 	{
-		free(buff);
-		exit(0);
-	}
-	free(buff);
-	for (i = 0; arr[i] != NULL; i++)
-	{
-		temp = arr[i];
-		cmd = str2arr(temp, " ");
-		getfunc(cmd, fname, count);
-		count++;
+		buff[bytes_read -1] = '\0';
+		while (*buff == ' ' || *buff == '\n')
+			buff++;
+		arr = str2arr(buff, delim);
+		 /* for (i = 0; arr[i] != NULL; i++) */
+		 /* 	printf("%s\n", arr[i]); */
+		if (arr == NULL)
+			exit(0);
+
+		for (i = 0; arr[i] != NULL; i++)
+		{
+			temp = arr[i];
+			cmd = str2arr(temp, " ");
+			getfunc(cmd, fname, count);
+			count++;
+		}
 	}
 
 	exit(0);

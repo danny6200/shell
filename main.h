@@ -28,7 +28,7 @@ typedef struct list
 
 
 
-
+void free_dp(char **ptr);
 char *_strtok(char *str, const char *delim);
 char **str2arr(char *str, char *delim);
 void chck_cmd(char **av, char *file_name, size_t count);

@@ -39,11 +39,9 @@ Point:
 			getfunc(av, f_name, count);
 		}
 	}
-		for (len = 0; av[len] != NULL; len++)
-			free(av[len]);
-		free(av);
-		free(buff);
-		return (0);
+	free_dp(av);
+	free(buff);
+	return (0);
 }
 
 /**
@@ -67,7 +65,6 @@ char **str2arr(char *str, char *delim)
 		i++;
 		arr[i] = strtok(NULL, delim);
 	}
-/*	arr[i] = NULL;*/
 	a = malloc((i + 1) * sizeof(char *));
 	if (a == NULL)
 		return (NULL);
@@ -80,9 +77,11 @@ char **str2arr(char *str, char *delim)
 			return (NULL);
 		}
 	}
+	a[i] = NULL;
 	free(arr);
 	return (a);
 }
+
 /**
  * chck_cmd - checks if command is valid
  * @av: argument vector
