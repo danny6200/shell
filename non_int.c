@@ -5,10 +5,10 @@
  * simple shell program.
  * @env: environmental variables
  * @fname: name of program
- * @count: command line count
+ * @c: command line count
  */
 
-void non_interactive(__attribute__((unused)) char **env, char *fname, int count)
+void non_interactive(__attribute__((unused)) char **env, char *fname, int c)
 {
 	char *buff = malloc(1024), *delim = "\n", **arr = NULL, **cmd = NULL;
 	char *temp = NULL;
@@ -20,23 +20,28 @@ void non_interactive(__attribute__((unused)) char **env, char *fname, int count)
 
 	while ((bytes_read = read(STDIN_FILENO, buff, 1024)) > 0)
 	{
-		buff[bytes_read -1] = '\0';
+		buff[bytes_read - 1] = '\0';
 		while (*buff == ' ' || *buff == '\n')
 			buff++;
 		arr = str2arr(buff, delim);
-		 /* for (i = 0; arr[i] != NULL; i++) */
-		 /* 	printf("%s\n", arr[i]); */
+		/* for (i = 0; arr[i] != NULL; i++) */
+		/*printf("%s\n", arr[i]); */
 		if (arr == NULL)
+		{
+			/* free(buff); */
 			exit(0);
+		}
 
 		for (i = 0; arr[i] != NULL; i++)
 		{
 			temp = arr[i];
 			cmd = str2arr(temp, " ");
-			getfunc(cmd, fname, count);
-			count++;
+			getfunc(cmd, fname, c);
+			c++;
 		}
+		free(arr);
 	}
 
+	free(buff);
 	exit(0);
 }

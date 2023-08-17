@@ -59,7 +59,10 @@ char **str2arr(char *str, char *delim)
 	arr = malloc(strlen(str) * sizeof(char *));
 	arr[i] = strtok(str, delim);
 	if (arr[i] == NULL)
+	{
+		free(arr);
 		return (NULL);
+	}
 	while (arr[i] != NULL)
 	{
 		i++;
@@ -67,18 +70,22 @@ char **str2arr(char *str, char *delim)
 	}
 	a = malloc((i + 1) * sizeof(char *));
 	if (a == NULL)
+	{
+		free(arr);
 		return (NULL);
+	}
 	for (n = 0; n < i; n++)
 	{
 		a[n] = strdup(arr[n]);
 		if (a[n] == NULL)
 		{
-			perror("Memory allocation error");
+			free_dp(a);
 			return (NULL);
 		}
+
 	}
 	a[i] = NULL;
-	free(arr);
+	/* free(arr); */
 	return (a);
 }
 
@@ -127,8 +134,11 @@ void getfunc(char **av, char *f_name, size_t count)
 
 	if (strcmp(av[0], "exit") == 0)
 		__exit(av[1]);
-	if (strcmp(av[0], "env") == 0)
+	else if (strcmp(av[0], "env") == 0)
+	{
 		print_env();
+		return;
+	}
 	child = fork();
 	if (child == 0)
 	{
