@@ -15,6 +15,7 @@ int main(int ac, char **av, __attribute__((unused)) char **env)
 	char *buff = NULL, *delim = " \n", *f_name = av[0];
 	size_t len = 0, count = 0;
 	ssize_t read;
+
 	(void)ac;
 
 	while (1)
@@ -82,43 +83,18 @@ char **str2arr(char *str, char *delim)
 	return (a);
 }
 /**
- * chck_cmd - checks if command is valid
- * @av: argument vector
- * @file_name: name of shell executable
- * @count: line count
- * Return: nothing
+ * chck_cmd - checks validity of command
+ *
+ * Return: 0 if cmd_path is found but 1 if otherwise
  */
-void chck_cmd(char **av, char *file_name, size_t count)
+int chck_cmd(char *cmd)
 {
-	unsigned int i, n = count;
-	struct stat st;
-	char **env = environ, **split_path, *path, *path_copy, *delim = "/";
+	char *path = _getpath(cmd);
 
-	(void)i; (void)path; (void)path_copy; (void)split_path; (void)delim;
-	if (stat(av[0], &st) == 0)
-	{
-/**		path = av[0];
-		path_copy = path;
-		printf("path is: %s\n", path);
-		split_path = str2arr(path_copy, delim);
-		printf("split_path[0] is: %s\n", split_path[0]);
-		printf("split_path[1] is: %s\n", split_path[1]);
-		printf("path_copy is: %s\n", path_copy);
-		if (split_path == NULL)
-			return;
-		av[0] = split_path[1];*/
-
-		if (execve(av[0], av, env) == -1)
-		{
-			fprintf(stdout, "%s: %u: %s: not found\n", file_name, n, av[0]);
-			return;
-		}
-	}
-	else
-	{
-		fprintf(stdout, "%s: %u: %s: not found\n", file_name, n, av[0]);
-		return;
-	}
+	if (path == NULL)
+		return (1);
+	free(path);
+	return (0);
 }
 
 
@@ -132,16 +108,52 @@ void chck_cmd(char **av, char *file_name, size_t count)
 
 void getfunc(char **av, char *f_name, size_t count)
 {
-	int status;
-	pid_t child;
-
 	if (strcmp(av[0], "exit") == 0)
 		__exit(av[1]);
 	if (strcmp(av[0], "env") == 0)
+	{
 		print_env();
-	child = fork();
-	if (child == 0)
-		chck_cmd(av, f_name, count);
+		return;
+	}
+	exec_cmd(av, f_name, count);
+}
+/**
+ * exec_cmd - executes command if PATH is found
+ * @av: argument vector
+ * @filename: name of shell executable
+ * @count: prompt display tracker
+ *
+ * Return: nothing
+ */
+void exec_cmd(char **av, char *file_name, size_t count)
+{
+	unsigned int cmd_status;
+	size_t n = count;
+	char *path, **env = environ, *cmd = av[0];
+	pid_t child;
+	int status;
+
+	cmd_status = chck_cmd(cmd);
+	path = _getpath(cmd);
+
+	if (cmd_status == 0)
+	{
+		child = fork();
+		if (child == 0)
+		{
+			if (execve(path, av, env) == -1)
+			{
+				fprintf(stdout, "%s: %lu: %s: execution error", file_name, n, av[0]);
+				exit(1);
+			}
+			free(path);
+			exit(1);
+		}
+		else
+			wait(&status);
+
+	}
 	else
-		wait(&status);
+		fprintf(stdout, "%s: %lu: %s: not found", file_name, n, av[0]);
+			return;
 }
