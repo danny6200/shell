@@ -39,9 +39,10 @@ Point:
 				goto Point;
 			getfunc(av, f_name, count);
 		}
-		free_dp(av);
-		free(buff);
-		return (0);
+	}
+	free_dp(av);
+	free(buff);
+	return (0);
 }
 
 /**
