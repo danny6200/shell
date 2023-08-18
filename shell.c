@@ -150,21 +150,21 @@ void exec_cmd(char **av, char *file_name, size_t count)
 {
 	unsigned int cmd_status;
 	size_t n = count;
-	char *path, stat_path[30], **env = environ, *cmd = av[0];
+	char *path,  **env = environ, *cmd = av[0];
 	pid_t child;
 	int status;
 
 	cmd_status = chck_cmd(cmd);
 	path = _getpath(cmd);
-	strcpy(stat_path, path);
-	free(path);
+	/* strcpy(stat_path, path); */
+	/* free(path); */
 
 	if (cmd_status == 0)
 	{
 		child = fork();
 		if (child == 0)
 		{
-			if (execve(stat_path, av, env) == -1)
+			if (execve(path, av, env) == -1)
 			{
 				fprintf(stdout, "%s: %lu: %s: execution error", file_name, n, av[0]);
 				exit(1);
