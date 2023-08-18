@@ -15,6 +15,7 @@ int main(int ac, char **av, char **env)
 	char *buff = NULL, *delim = " \n", *f_name = av[0];
 	size_t len = 0, count = 0;
 	ssize_t read;
+
 	(void)ac;
 
 	while (1)
@@ -95,32 +96,21 @@ char **str2arr(char *str, char *delim)
 }
 
 /**
- * chck_cmd - checks if command is valid
- * @av: argument vector
- * @file_name: name of shell executable
- * @count: line count
- * Return: nothing
+ * chck_cmd - checks validity of command
+ *
+ * Return: 0 if cmd_path is found but 1 if otherwise
  */
-void chck_cmd(char **av, char *file_name, size_t count)
+int chck_cmd(char *cmd)
 {
-	unsigned int i, n = count;
-	struct stat st;
-	char **env = environ;
+	char *path = _getpath(cmd);
 
-	(void)i;
-	if (stat(av[0], &st) == 0)
+	if (path == NULL)
 	{
-		if (execve(av[0], av, env) == -1)
-		{
-			fprintf(stdout, "%s: %u: %s: not found\n", file_name, n, av[0]);
-			return;
-		}
+		free(path);
+		return (1);
 	}
-	else
-	{
-		fprintf(stdout, "%s: %u: %s: not found\n", file_name, n, av[0]);
-		return;
-	}
+	free(path);
+	return (0);
 }
 
 
@@ -134,9 +124,8 @@ void chck_cmd(char **av, char *file_name, size_t count)
 
 void getfunc(char **av, char *f_name, size_t count)
 {
-	int status;
-	pid_t child;
 	char *exit_code = av[1];
+
 
 	if (strcmp(av[0], "exit") == 0)
 	{
@@ -149,12 +138,44 @@ void getfunc(char **av, char *f_name, size_t count)
 		print_env();
 		return;
 	}
-	child = fork();
-	if (child == 0)
+	exec_cmd(av, f_name, count);
+}
+/**
+ * exec_cmd - executes command if PATH is found
+ * @av: argument vector
+ * @filename: name of shell executable
+ * @count: prompt display tracker
+ *
+ * Return: nothing
+ */
+void exec_cmd(char **av, char *file_name, size_t count)
+{
+	unsigned int cmd_status;
+	size_t n = count;
+	char *path, **env = environ, *cmd = av[0];
+	pid_t child;
+	int status;
+
+	cmd_status = chck_cmd(cmd);
+	path = _getpath(cmd);
+
+	if (cmd_status == 0)
 	{
-		chck_cmd(av, f_name, count);
-		exit(0);
+		child = fork();
+		if (child == 0)
+		{
+			if (execve(path, av, env) == -1)
+			{
+				fprintf(stdout, "%s: %lu: %s: execution error", file_name, n, av[0]);
+				exit(1);
+			}
+			free(path);
+			exit(1);
+		}
+		else
+			wait(&status);
 	}
 	else
-		wait(&status);
+		fprintf(stdout, "%s: %lu: %s: not found", file_name, n, av[0]);
+			return;
 }
