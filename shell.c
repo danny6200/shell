@@ -42,7 +42,7 @@ Point:
 			getfunc(av, f_name, count);
 		}
 		free_dp(av);
-		/* free(buff); */
+		free(buff);
 	}
 	free_dp(av);
 	free(buff);
@@ -124,17 +124,15 @@ int chck_cmd(char *cmd)
 
 void getfunc(char **av, char *f_name, size_t count)
 {
-	char *exit_code = av[1];
-
 
 	if (strcmp(av[0], "exit") == 0)
 	{
-		free_dp(av);
-		__exit(exit_code);
+		/* free_dp(av); */
+		__exit(av[1]);
 	}
 	else if (strcmp(av[0], "env") == 0)
 	{
-		free_dp(av);
+		/* free_dp(av); */
 		print_env();
 		return;
 	}
@@ -143,7 +141,7 @@ void getfunc(char **av, char *f_name, size_t count)
 /**
  * exec_cmd - executes command if PATH is found
  * @av: argument vector
- * @filename: name of shell executable
+ * @file_name: name of shell executable
  * @count: prompt display tracker
  *
  * Return: nothing
@@ -152,30 +150,38 @@ void exec_cmd(char **av, char *file_name, size_t count)
 {
 	unsigned int cmd_status;
 	size_t n = count;
-	char *path, **env = environ, *cmd = av[0];
+	char *path, stat_path[30], **env = environ, *cmd = av[0];
 	pid_t child;
 	int status;
 
 	cmd_status = chck_cmd(cmd);
 	path = _getpath(cmd);
+	strcpy(stat_path, path);
+	free(path);
 
 	if (cmd_status == 0)
 	{
 		child = fork();
 		if (child == 0)
 		{
-			if (execve(path, av, env) == -1)
+			if (execve(stat_path, av, env) == -1)
 			{
 				fprintf(stdout, "%s: %lu: %s: execution error", file_name, n, av[0]);
 				exit(1);
 			}
-			free(path);
+			/* free(path); */
 			exit(1);
 		}
 		else
+		{
 			wait(&status);
+			/* free(path); */
+		}
 	}
 	else
-		fprintf(stdout, "%s: %lu: %s: not found", file_name, n, av[0]);
+	{
+		free(path);
+		fprintf(stdout, "%s: %lu: %s: not found\n", file_name, n, av[0]);
 			return;
+	}
 }

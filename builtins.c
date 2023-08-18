@@ -13,10 +13,10 @@ char *_getpath(char *cmd)
 	if (stat(cmd, &st) == 0)
 	{
 		cmd_path = strdup(cmd);
-		return (cmd_path);
+		return (cmd_path); /*needs free*/
 	}
 	path = getenv("PATH");
-	path_copy = strdup(path);
+	path_copy = strdup(path); /*needs free*/
 
 	arr = str2arr(path_copy, delim);
 
@@ -31,12 +31,12 @@ char *_getpath(char *cmd)
 		if (stat(cmd_path, &st) == 0)
 		{
 			free(path_copy);
-			free(arr);
+			free_dp(arr);
 			return (cmd_path);
 		}
 	}
 	free(cmd_path);
-	free(arr);
+	free_dp(arr);
 	free(path_copy);
 	return (NULL);
 }
