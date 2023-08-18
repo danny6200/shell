@@ -29,15 +29,19 @@ Point:
 			read = getline(&buff, &len, stdin);
 			if (read == -1)
 			{
+				free(buff);
 				printf("\n");
 				exit(1);
 			}
 			av = str2arr(buff, delim);
+			free(buff);
 			buff = NULL;
 			if (av == NULL)
 				goto Point;
 			getfunc(av, f_name, count);
 		}
+		free_dp(av);
+		/* free(buff); */
 	}
 	free_dp(av);
 	free(buff);
@@ -80,12 +84,13 @@ char **str2arr(char *str, char *delim)
 		if (a[n] == NULL)
 		{
 			free_dp(a);
+			free(arr);
 			return (NULL);
 		}
 
 	}
 	a[i] = NULL;
-	/* free(arr); */
+	free(arr);
 	return (a);
 }
 
@@ -131,11 +136,16 @@ void getfunc(char **av, char *f_name, size_t count)
 {
 	int status;
 	pid_t child;
+	char *exit_code = av[1];
 
 	if (strcmp(av[0], "exit") == 0)
-		__exit(av[1]);
+	{
+		free_dp(av);
+		__exit(exit_code);
+	}
 	else if (strcmp(av[0], "env") == 0)
 	{
+		free_dp(av);
 		print_env();
 		return;
 	}

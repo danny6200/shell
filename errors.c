@@ -7,7 +7,9 @@
 void __exit(char *str)
 {
 	if (str == NULL)
+	{
 		exit(0);
+	}
 	else
 	{
 		printf("%s\n", str);

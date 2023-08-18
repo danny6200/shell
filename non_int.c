@@ -11,24 +11,23 @@
 void non_interactive(__attribute__((unused)) char **env, char *fname, int c)
 {
 	char *buff = malloc(1024), *delim = "\n", **arr = NULL, **cmd = NULL;
-	char *temp = NULL;
+	char *temp = NULL, *buff_h;
 	ssize_t bytes_read;
 	int i;
 
 	if (buff == NULL)
 		exit(0);
 
+	buff_h = buff;
 	while ((bytes_read = read(STDIN_FILENO, buff, 1024)) > 0)
 	{
 		buff[bytes_read - 1] = '\0';
 		while (*buff == ' ' || *buff == '\n')
 			buff++;
 		arr = str2arr(buff, delim);
-		/* for (i = 0; arr[i] != NULL; i++) */
-		/*printf("%s\n", arr[i]); */
 		if (arr == NULL)
 		{
-			/* free(buff); */
+			free(buff_h);
 			exit(0);
 		}
 
@@ -42,6 +41,6 @@ void non_interactive(__attribute__((unused)) char **env, char *fname, int c)
 		free(arr);
 	}
 
-	free(buff);
+	free(buff_h);
 	exit(0);
 }
