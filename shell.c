@@ -18,32 +18,35 @@ int main(int ac, char **av, char **env)
 
 	(void)ac;
 
-	while (1)
-	{
-Point:
-		count++;
-		if (!(isatty(STDIN_FILENO)))
-			non_interactive(env, f_name, count);
-		else
+	if (ac > 1)
+		file(av);
+	else
+		while (1)
 		{
-			printf("$ ");
-			read = getline(&buff, &len, stdin);
-			if (read == -1)
+Point:
+			count++;
+			if (!(isatty(STDIN_FILENO)))
+				non_interactive(env, f_name, count);
+			else
 			{
+				printf("$ ");
+				read = getline(&buff, &len, stdin);
+				if (read == -1)
+				{
+					free(buff);
+					printf("\n");
+					exit(1);
+				}
+				av = str2arr(buff, delim);
 				free(buff);
-				printf("\n");
-				exit(1);
+				buff = NULL;
+				if (av == NULL)
+					goto Point;
+				getfunc(av, f_name, count);
 			}
-			av = str2arr(buff, delim);
+			free_dp(av);
 			free(buff);
-			buff = NULL;
-			if (av == NULL)
-				goto Point;
-			getfunc(av, f_name, count);
 		}
-		free_dp(av);
-		free(buff);
-	}
 	free_dp(av);
 	free(buff);
 	return (0);

@@ -10,7 +10,7 @@
 #include <sys/wait.h>
 #include <sys/stat.h>
 #include <stdlib.h>
-
+#include <fcntl.h>
 
 /**
  * struct list - environmental variables linked list
@@ -31,7 +31,7 @@ typedef struct list
 struct stat st;
 
 /* Function Prototypes */
-
+void file(char **av);
 void free_dp(char **ptr);
 char *_strtok(char *str, const char *delim);
 char *_getpath(char *cmd);

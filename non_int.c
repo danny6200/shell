@@ -21,6 +21,7 @@ void non_interactive(__attribute__((unused)) char **env, char *fname, int c)
 	buff_h = buff;
 	while ((bytes_read = read(STDIN_FILENO, buff, 1024)) > 0)
 	{
+
 		buff[bytes_read - 1] = '\0';
 		while (*buff == ' ' || *buff == '\n')
 			buff++;
@@ -36,9 +37,11 @@ void non_interactive(__attribute__((unused)) char **env, char *fname, int c)
 			temp = arr[i];
 			cmd = str2arr(temp, " ");
 			getfunc(cmd, fname, c);
+			free_dp(cmd);
 			c++;
 		}
-		free(arr);
+		free_dp(arr);
+
 	}
 
 	free(buff_h);
