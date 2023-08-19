@@ -26,7 +26,7 @@ typedef struct list
 
 /**
  * struct stat - an inbuilt struct to keeps file stats
- * 
+ *
  */
 struct stat st;
 
@@ -44,7 +44,7 @@ char **str2arr(char *str, char *delim);
 void err(char *error_type);
 void __exit(char *str);
 void print_env(void);
-void non_interactive(char **env, char * f_name, int count);
+void non_interactive(char **env, char *f_name, int count);
 list_t env2linkd(char **env);
 
 #endif /* main.h */

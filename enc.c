@@ -4,7 +4,7 @@
  * print_env - prints the environmental variable
  */
 
-void print_env()
+void print_env(void)
 {
 	char **env = environ;
 	int i;

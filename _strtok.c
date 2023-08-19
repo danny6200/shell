@@ -9,28 +9,34 @@
 
 char *_strtok(char *str, const char *delim)
 {
-	/* Stores the last position between function calls */
 	static char *last;
 	char *start, *end, *copy;
 
 	if (str != NULL)
-		last = str;/* Initialize last with str if str is not NULL */
+		last = str;
 
-	if (last == NULL)
-		return (NULL);/* Return NULL if there are no more tokens */
+	if (last == NULL || *last == '\0')
+		return (NULL);
 
-	copy = malloc(strlen(last) + 1);
-	strcpy(copy, last);
-	start = copy;/* Set the starting point for the token */
-	end = strpbrk(start, delim);/* Find the next delimiter in the string */
-	if (end != NULL)
-	{
-		*end = '\0';/* Replace the delimiter with a null terminator */
-		/* Update last to point to the character after the delimiter */
-		last = end + 1;
-	}
-	else
-		last = NULL;/* Set last to NULL if no more tokens are found */
+	start = last;
+	while (*start != '\0' && strchr(delim, *start))
+		start++;
 
-	return (copy);/* Return the current token  and await next call*/
+	if (*start == '\0')
+		return (NULL);
+
+	end = start;
+	while (*end != '\0' && !strchr(delim, *end))
+		end++;
+
+	copy = malloc((end - start) + 1);
+	if (copy == NULL)
+		exit(EXIT_FAILURE);
+
+	strncpy(copy, start, end - start);
+	copy[end - start] = '\0';
+
+	last = (*end == '\0') ? NULL : end + 1;
+
+	return (copy);
 }

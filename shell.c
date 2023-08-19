@@ -62,7 +62,7 @@ char **str2arr(char *str, char *delim)
 	char **arr, **a;
 
 	arr = malloc(strlen(str) * sizeof(char *));
-	arr[i] = strtok(str, delim);
+	arr[i] = _strtok(str, delim);
 	if (arr[i] == NULL)
 	{
 		free(arr);
@@ -71,12 +71,12 @@ char **str2arr(char *str, char *delim)
 	while (arr[i] != NULL)
 	{
 		i++;
-		arr[i] = strtok(NULL, delim);
+		arr[i] = _strtok(NULL, delim);
 	}
 	a = malloc((i + 1) * sizeof(char *));
 	if (a == NULL)
 	{
-		free(arr);
+		free_dp(arr);
 		return (NULL);
 	}
 	for (n = 0; n < i; n++)
@@ -85,19 +85,19 @@ char **str2arr(char *str, char *delim)
 		if (a[n] == NULL)
 		{
 			free_dp(a);
-			free(arr);
+			free_dp(arr);
 			return (NULL);
 		}
 
 	}
 	a[i] = NULL;
-	free(arr);
+	free_dp(arr);
 	return (a);
 }
 
 /**
  * chck_cmd - checks validity of command
- *
+ * @cmd: command string
  * Return: 0 if cmd_path is found but 1 if otherwise
  */
 int chck_cmd(char *cmd)
