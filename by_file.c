@@ -16,7 +16,7 @@ void file(char ** av)
 		if (fd < 0)
 		{
 			fprintf(stderr, "%s: %u: Can't open %s\n", av[0], count, av[i]);
-			exit(EXIT_FAILURE);
+			exit(127);
 		}
 		if ((bytes_read = read(fd, buff, sizeof(buff))) > 0)
 		{
