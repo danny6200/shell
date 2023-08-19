@@ -25,6 +25,11 @@ void non_interactive(__attribute__((unused)) char **env, char *fname, int c)
 		buff[bytes_read - 1] = '\0';
 		while (*buff == ' ' || *buff == '\n')
 			buff++;
+		if (*buff == '\0')
+		{
+			free(buff_h);
+			exit(0);
+		}
 		arr = str2arr(buff, delim);
 		if (arr == NULL)
 		{

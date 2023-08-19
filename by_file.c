@@ -5,9 +5,9 @@
  * @av: argument vector
  */
 
-void file(char ** av)
+void file(char **av)
 {
-	int i = 1, n = 0,fd, bytes_read, count = 0;
+	int i = 1, n = 0, fd, bytes_read, count = 0;
 	char buff[1024], *delim = "\n", **lines, **cmd, *temp = NULL;
 
 	while (av[i] != NULL)
@@ -18,7 +18,8 @@ void file(char ** av)
 			fprintf(stderr, "%s: %u: Can't open %s\n", av[0], count, av[i]);
 			exit(127);
 		}
-		if ((bytes_read = read(fd, buff, sizeof(buff))) > 0)
+		bytes_read = read(fd, buff, sizeof(buff));
+		if (bytes_read > 0)
 		{
 			buff[bytes_read - 1] = '\0';
 			lines = str2arr(buff, delim);

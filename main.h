@@ -30,6 +30,9 @@ typedef struct list
  */
 struct stat st;
 
+
+#define STAT_BUFF_SIZE 256
+
 /* Function Prototypes */
 void file(char **av);
 void free_dp(char **ptr);
@@ -46,5 +49,5 @@ void __exit(char *str);
 void print_env(void);
 void non_interactive(char **env, char *f_name, int count);
 list_t env2linkd(char **env);
-
+char *d2s(const char *dynamic_str);
 #endif /* main.h */

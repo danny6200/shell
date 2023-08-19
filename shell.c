@@ -109,10 +109,10 @@ int chck_cmd(char *cmd)
 
 	if (path == NULL)
 	{
-		free(path);
+		/* free(path); */
 		return (1);
 	}
-	free(path);
+	/* free(path); */
 	return (0);
 }
 

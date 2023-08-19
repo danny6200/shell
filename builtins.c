@@ -9,11 +9,14 @@ char *_getpath(char *cmd)
 {
 	char *path, *path_copy, **arr, *delim = ":", *cmd_path;
 	unsigned int i = 0;
+	char *static_cmd;
 
 	if (stat(cmd, &st) == 0)
 	{
 		cmd_path = strdup(cmd);
-		return (cmd_path); /*needs free*/
+		static_cmd = d2s(cmd_path);
+		free(cmd_path);
+		return (static_cmd); /*needs free*/
 	}
 	path = getenv("PATH");
 	path_copy = strdup(path); /*needs free*/
@@ -32,7 +35,9 @@ char *_getpath(char *cmd)
 		{
 			free(path_copy);
 			free_dp(arr);
-			return (cmd_path);
+			static_cmd = d2s(cmd_path);
+			free(cmd_path);
+			return (static_cmd);
 		}
 	}
 	free(cmd_path);
