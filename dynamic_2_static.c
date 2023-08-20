@@ -6,7 +6,7 @@
  * Return: pointer to freshly copied string
  */
 
-char *d2s(const char *dynamic_str)
+char *d2s(char *dynamic_str)
 {
 	static char stat_buff[STAT_BUFF_SIZE];
 
@@ -16,7 +16,7 @@ char *d2s(const char *dynamic_str)
 	}
 	else
 	{
-		strncpy(stat_buff, dynamic_str, STAT_BUFF_SIZE - 1);
+		_strncpy(stat_buff, dynamic_str, STAT_BUFF_SIZE - 1);
 		stat_buff[STAT_BUFF_SIZE - 1] = '\0';
 	}
 

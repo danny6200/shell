@@ -13,23 +13,23 @@ char *_getpath(char *cmd)
 
 	if (stat(cmd, &st) == 0)
 	{
-		cmd_path = strdup(cmd);
+		cmd_path = _strdup(cmd);
 		static_cmd = d2s(cmd_path);
 		free(cmd_path);
 		return (static_cmd); /*needs free*/
 	}
 	path = getenv("PATH");
-	path_copy = strdup(path); /*needs free*/
+	path_copy = _strdup(path); /*needs free*/
 
 	arr = str2arr(path_copy, delim);
 
 	while (arr[i] != NULL)
 	{
-		cmd_path = malloc(strlen(arr[i]) + strlen(cmd) + 2);
-		strcpy(cmd_path, arr[i]);
-		strcat(cmd_path, "/");
-		strcat(cmd_path, cmd);
-		strcat(cmd_path, "\0");
+		cmd_path = malloc(_strlen(arr[i]) + _strlen(cmd) + 2);
+		_strcpy(cmd_path, arr[i]);
+		_strcat(cmd_path, "/");
+		_strcat(cmd_path, cmd);
+		_strcat(cmd_path, "\0");
 		i++;
 		if (stat(cmd_path, &st) == 0)
 		{

@@ -64,7 +64,7 @@ char **str2arr(char *str, char *delim)
 	int i = 0, n;
 	char **arr, **a;
 
-	arr = malloc(strlen(str) * sizeof(char *));
+	arr = malloc(_strlen(str) * sizeof(char *));
 	arr[i] = _strtok(str, delim);
 	if (arr[i] == NULL)
 	{
@@ -84,7 +84,7 @@ char **str2arr(char *str, char *delim)
 	}
 	for (n = 0; n < i; n++)
 	{
-		a[n] = strdup(arr[n]);
+		a[n] = _strdup(arr[n]);
 		if (a[n] == NULL)
 		{
 			free_dp(a);
@@ -128,12 +128,12 @@ int chck_cmd(char *cmd)
 void getfunc(char **av, char *f_name, size_t count)
 {
 
-	if (strcmp(av[0], "exit") == 0)
+	if (_strcmp(av[0], "exit") == 0)
 	{
 		/* free_dp(av); */
 		__exit(av[1]);
 	}
-	else if (strcmp(av[0], "env") == 0)
+	else if (_strcmp(av[0], "env") == 0)
 	{
 		/* free_dp(av); */
 		print_env();

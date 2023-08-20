@@ -19,21 +19,21 @@ char *_strtok(char *str, const char *delim)
 		return (NULL);
 
 	start = last;
-	while (*start != '\0' && strchr(delim, *start))
+	while (*start != '\0' && _strchr(delim, *start))
 		start++;
 
 	if (*start == '\0')
 		return (NULL);
 
 	end = start;
-	while (*end != '\0' && !strchr(delim, *end))
+	while (*end != '\0' && !(_strchr(delim, *end)))
 		end++;
 
 	copy = malloc((end - start) + 1);
 	if (copy == NULL)
 		exit(EXIT_FAILURE);
 
-	strncpy(copy, start, end - start);
+	_strncpy(copy, start, end - start);
 	copy[end - start] = '\0';
 
 	last = (*end == '\0') ? NULL : end + 1;

@@ -49,5 +49,14 @@ void __exit(char *str);
 void print_env(void);
 void non_interactive(char **env, char *f_name, int count);
 list_t env2linkd(char **env);
-char *d2s(const char *dynamic_str);
+char *d2s(char *dynamic_str);
+
+/* helpers */
+char *_strcpy(char *dest, char *src);
+char *_strcat(char *dest, char *src);
+char *_strdup(char *str);
+int _strlen(char *s);
+char *_strncpy(char *dest, char *src, int n);
+char *_strchr(const char *s, char c);
+int _strcmp(char *s1, char *s2);
 #endif /* main.h */
