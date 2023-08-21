@@ -36,7 +36,6 @@ void non_interactive(__attribute__((unused)) char **env, char *fname, int c)
 			free(buff_h);
 			exit(0);
 		}
-
 		for (i = 0; arr[i] != NULL; i++)
 		{
 			temp = arr[i];
@@ -46,7 +45,6 @@ void non_interactive(__attribute__((unused)) char **env, char *fname, int c)
 			c++;
 		}
 		free_dp(arr);
-
 	}
 
 	free(buff_h);

@@ -2,7 +2,7 @@
 
 /**
  * d2s - converts/ copies a dynamic string to static memory
- * @str: dynamic string to be copied
+ * @dynamic_str: dynamic string to be copied
  * Return: pointer to freshly copied string
  */
 

@@ -11,7 +11,7 @@
 #include <sys/stat.h>
 #include <stdlib.h>
 #include <fcntl.h>
-
+#include <signal.h>
 /**
  * struct list - environmental variables linked list
  * @env: environmental variable
@@ -45,12 +45,13 @@ void getfunc(char **av, char *f_name, size_t count);
 extern char **environ;
 char **str2arr(char *str, char *delim);
 void err(char *error_type);
-void __exit(char *str);
+void __exit(int stat);
 void print_env(void);
 void non_interactive(char **env, char *f_name, int count);
 list_t env2linkd(char **env);
 char *d2s(char *dynamic_str);
-
+void nexec_cmd(char **av, char *file_name, size_t count);
+void ngetfunc(char **av, char *f_name, size_t count);
 /* helpers */
 char *_strcpy(char *dest, char *src);
 char *_strcat(char *dest, char *src);

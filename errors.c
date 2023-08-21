@@ -1,18 +1,10 @@
 #include "main.h"
 /**
  * __exit - exits program with or without code printed
- * @str: code to be printed
+ * @stat: code to be printed
  */
 
-void __exit(char *str)
+void __exit(int stat)
 {
-
-	if (str == NULL)
-	{
-		exit(0);
-	}
-	else
-	{
-		exit(atoi(str));
-	}
+	exit(stat);
 }

@@ -17,7 +17,7 @@ int main(int ac, char **av, char **env)
 	ssize_t read;
 
 	(void)ac;
-
+	signal(SIGINT, SIG_IGN);
 	if (ac > 1)
 		file(av);
 	else
@@ -37,6 +37,7 @@ Point:
 					printf("\n");
 					exit(1);
 				}
+				signal(SIGINT, SIG_IGN);
 				av = str2arr(buff, delim);
 				free(buff);
 				buff = NULL;
@@ -76,7 +77,7 @@ char **str2arr(char *str, char *delim)
 		i++;
 		arr[i] = _strtok(NULL, delim);
 	}
-	a = malloc((i + 1) * sizeof(char *));
+	a = malloc((i + 2) * sizeof(char *));
 	if (a == NULL)
 	{
 		free_dp(arr);
@@ -127,11 +128,14 @@ int chck_cmd(char *cmd)
 
 void getfunc(char **av, char *f_name, size_t count)
 {
+	int exit_stat = 0;
 
 	if (_strcmp(av[0], "exit") == 0)
 	{
-		/* free_dp(av); */
-		__exit(av[1]);
+		if (av[1] != NULL)
+			exit_stat = atoi(av[1]);
+		free_dp(av);
+		__exit(exit_stat);
 	}
 	else if (_strcmp(av[0], "env") == 0)
 	{
@@ -159,8 +163,6 @@ void exec_cmd(char **av, char *file_name, size_t count)
 
 	cmd_status = chck_cmd(cmd);
 	path = _getpath(cmd);
-	/* strcpy(stat_path, path); */
-	/* free(path); */
 
 	if (cmd_status == 0)
 	{
@@ -169,7 +171,7 @@ void exec_cmd(char **av, char *file_name, size_t count)
 		{
 			if (execve(path, av, env) == -1)
 			{
-				fprintf(stdout, "%s: %lu: %s: execution error", file_name, n, av[0]);
+				fprintf(stderr, "%s: %lu: %s: execution error", file_name, n, av[0]);
 				exit(1);
 			}
 			/* free(path); */
@@ -184,7 +186,7 @@ void exec_cmd(char **av, char *file_name, size_t count)
 	else
 	{
 		free(path);
-		fprintf(stdout, "%s: %lu: %s: not found\n", file_name, n, av[0]);
-			return;
+		fprintf(stderr, "%s: %lu: %s: not found\n", file_name, n, av[0]);
+		return;
 	}
 }
