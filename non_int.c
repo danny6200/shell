@@ -31,11 +31,12 @@ void non_interactive(__attribute__((unused)) char **env, char *fname, int c)
 			exit(0);
 		}
 		arr = str2arr(buff, delim);
-		if (arr == NULL)
+		if (arr[0] == NULL)
 		{
 			free(buff_h);
 			exit(0);
 		}
+		/* comment(arr); */
 		for (i = 0; arr[i] != NULL; i++)
 		{
 			temp = arr[i];

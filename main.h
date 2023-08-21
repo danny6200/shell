@@ -52,6 +52,7 @@ list_t env2linkd(char **env);
 char *d2s(char *dynamic_str);
 void nexec_cmd(char **av, char *file_name, size_t count);
 void ngetfunc(char **av, char *f_name, size_t count);
+void comment(char **arr);
 /* helpers */
 char *_strcpy(char *dest, char *src);
 char *_strcat(char *dest, char *src);

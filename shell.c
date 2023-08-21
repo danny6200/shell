@@ -43,6 +43,7 @@ Point:
 				buff = NULL;
 				if (av == NULL)
 					goto Point;
+				/* comment(av); */
 				getfunc(av, f_name, count);
 			}
 			free_dp(av);
@@ -77,6 +78,7 @@ char **str2arr(char *str, char *delim)
 		i++;
 		arr[i] = _strtok(NULL, delim);
 	}
+	comment(arr);
 	a = malloc((i + 2) * sizeof(char *));
 	if (a == NULL)
 	{
@@ -92,7 +94,6 @@ char **str2arr(char *str, char *delim)
 			free_dp(arr);
 			return (NULL);
 		}
-
 	}
 	a[i] = NULL;
 	free_dp(arr);
