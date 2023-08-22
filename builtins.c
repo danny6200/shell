@@ -10,6 +10,7 @@ char *_getpath(char *cmd)
 	char *path, *path_copy, **arr, *delim = ":", *cmd_path;
 	unsigned int i = 0;
 	char *static_cmd;
+	struct stat st;
 
 	if (stat(cmd, &st) == 0)
 	{
