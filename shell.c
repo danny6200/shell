@@ -16,7 +16,7 @@ int main(int ac, char **av, char **env)
 	size_t len = 0, count = 0;
 	ssize_t read;
 
-	(void)ac;
+/*	(void)ac;*/
 	signal(SIGINT, SIG_IGN);
 	if (ac > 1)
 		file(av);
@@ -142,6 +142,11 @@ void getfunc(char **av, char *f_name, size_t count)
 	{
 		/* free_dp(av); */
 		print_env();
+		return;
+	}
+	else if (_strcmp(av[0], "cd") == 0)
+	{
+		cd(av);
 		return;
 	}
 	exec_cmd(av, f_name, count);
