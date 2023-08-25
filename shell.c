@@ -130,13 +130,23 @@ int chck_cmd(char *cmd)
 void getfunc(char **av, char *f_name, size_t count)
 {
 	int exit_stat = 0;
+	size_t c = count;
+	char *f = f_name;
 
 	if (_strcmp(av[0], "exit") == 0)
 	{
 		if (av[1] != NULL)
+		{
+			if (!(isdigit(av[1][0])))
+			{
+				fprintf(stderr, "%s: %lu: exit: Illegal number: %s\n", f, c, av[1]);
+				free_dp(av);
+				exit(2);
+			}
 			exit_stat = atoi(av[1]);
+		}
 		free_dp(av);
-		__exit(exit_stat);
+		__exit(exit_stat, f_name, count);
 	}
 	else if (_strcmp(av[0], "env") == 0)
 	{

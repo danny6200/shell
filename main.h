@@ -10,6 +10,7 @@
 #include <sys/wait.h>
 #include <sys/stat.h>
 #include <stdlib.h>
+#include <ctype.h>
 #include <fcntl.h>
 #include <signal.h>
 /**
@@ -39,7 +40,7 @@ void getfunc(char **av, char *f_name, size_t count);
 extern char **environ;
 char **str2arr(char *str, char *delim);
 void err(char *error_type);
-void __exit(int stat);
+void __exit(int stat, char *f, size_t c);
 void print_env(void);
 void non_interactive(char **env, char *f_name, int count);
 list_t env2linkd(char **env);
