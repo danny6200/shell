@@ -1,10 +1,10 @@
 #include "main.h"
 
 /**
- * _strtok - costum strtok
+ * _strtok - costum strtok, that behaves exactly like original
  * @str: string to be tokenized
- * @delim: delimiter
- * Return: each word
+ * @delim: delimiter that seperates
+ * Return: pointer each word tokenized
  */
 
 char *_strtok(char *str, const char *delim)
